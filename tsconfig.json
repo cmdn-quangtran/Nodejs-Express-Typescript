@@ -1,0 +1,25 @@
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "exclude": ["node_modules", "tsc-cache", "src", "dist"],
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "outDir": "./tsc-cache",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2020",
+    "importsNotUsedAsValues": "remove",
+    "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": false,
+    "incremental": true,
+    "lib": ["ESNext"]
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
+}
