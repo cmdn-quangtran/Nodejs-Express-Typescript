@@ -4,6 +4,7 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import { auth } from "express-oauth2-jwt-bearer";
 import { initHandler } from "../init-handler";
 import { HttpError } from "express-openapi-validator/dist/framework/types";
 import {
@@ -13,8 +14,14 @@ import {
 } from "../../util/error-util";
 
 import { type Logger } from "../../domain/support/logger";
-import { LOGGER, ALLOW_ORIGINS } from "../../di-container/service-id";
+import {
+  LOGGER,
+  ALLOW_ORIGINS,
+  AUTH0_AUDIENCE,
+  AUTH0_ISSUE_BASE_URL,
+} from "../../di-container/service-id";
 import { buildHealthRouter } from "./routes/health/health.route";
+import { buildHandleVerifyJwtMiddleware } from "./middleware/handle-auth-middleware";
 
 export class NotFoundResourceError extends Error {
   override name = "NotFoundResourceError" as const;
@@ -26,6 +33,9 @@ const bootstrap = () => {
   const { container } = initHandler();
   const allowOrigins = container.get<string>(ALLOW_ORIGINS);
   const logger = container.get<Logger>(LOGGER);
+  const auth0Audience = container.get<string>(AUTH0_AUDIENCE);
+  const auth0IssueBaseUrl = container.get<string>(AUTH0_ISSUE_BASE_URL);
+
   const app = express();
 
   app.use(
@@ -64,9 +74,14 @@ const bootstrap = () => {
   // Health check (no authentication required)
   app.use("/health", buildHealthRouter({ container }));
 
-  app.get("/", (_req, res) => {
-    res.status(200).send("Hello, World");
+  // JWT verification
+  const verifyJwt = auth({
+    audience: auth0Audience,
+    issuerBaseURL: auth0IssueBaseUrl,
+    tokenSigningAlg: "RS256",
   });
+  app.use(verifyJwt);
+  app.use(buildHandleVerifyJwtMiddleware({ logger }));
 
   // Validation
 

@@ -16,6 +16,12 @@ export const registerContainer = (): Container => {
     .bind(serviceId.LOG_LEVEL)
     .toDynamicValue(() => unwrapEnv("LOG_LEVEL"))
     .inSingletonScope();
+  container
+    .bind(serviceId.AUTH0_AUDIENCE)
+    .toConstantValue(unwrapEnv("AUTH0_AUDIENCE"));
+  container
+    .bind(serviceId.AUTH0_ISSUE_BASE_URL)
+    .toConstantValue(unwrapEnv("AUTH0_ISSUE_BASE_URL"));
 
   /**
    * Utilities
