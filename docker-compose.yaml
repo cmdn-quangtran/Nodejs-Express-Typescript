@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:15-alpine3.18
+    ports:
+      - "5432:5432"
+    volumes:
+      - shop-backed-database:/var/lib/postgresql/data
+      - ./src/util/test/db-creation.sql:/docker-entrypoint-initdb.d/db-creation.sql
+    environment:
+      POSTGRES_USER: shop_admin
+      POSTGRES_PASSWORD: pAssw0rd
+
+volumes:
+  shop-backed-database:

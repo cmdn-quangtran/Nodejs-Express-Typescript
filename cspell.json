@@ -8,6 +8,9 @@
     "DDTHH",
     "SSSZZ",
     "aspida",
-    "codegen"
+    "codegen",
+    "kysely",
+    "Millis",
+    "pkey"
   ]
 }
