@@ -25,17 +25,17 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
-  email       String    @unique
-  username    String    @unique
+  id          String   @id @default(uuid())
+  email       String   @unique
+  username    String   @unique
   password    String
-  role        Role      @default(USER)
-  name        String?
+  role        Role     @default(USER)
+  name        String
   avatar      String?
-  dayOfBirth  DateTime?
-  phoneNumber Int?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  dayOfBirth  DateTime @db.Timestamp()
+  phoneNumber Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 enum Role {

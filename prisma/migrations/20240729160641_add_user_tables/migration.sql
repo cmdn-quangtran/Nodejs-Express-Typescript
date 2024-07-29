@@ -8,10 +8,10 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
-    "name" TEXT,
+    "name" TEXT NOT NULL,
     "avatar" TEXT,
-    "dayOfBirth" TIMESTAMP(3),
-    "phoneNumber" INTEGER,
+    "dayOfBirth" TIMESTAMP NOT NULL,
+    "phoneNumber" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
