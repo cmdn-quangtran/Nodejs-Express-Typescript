@@ -177,3 +177,4 @@ localhost.pem
 localhost-key.pem
 
 web/**/config.ts
+src/generated

@@ -4,6 +4,7 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import { middleware as openApiValidatorMiddleware } from "express-openapi-validator";
 import { auth } from "express-oauth2-jwt-bearer";
 import { initHandler } from "../init-handler";
 import { HttpError } from "express-openapi-validator/dist/framework/types";
@@ -22,6 +23,7 @@ import {
 } from "../../di-container/service-id";
 import { buildHealthRouter } from "./routes/health/health.route";
 import { buildHandleVerifyJwtMiddleware } from "./middleware/handle-auth-middleware";
+import { buildHandleOpenApiValidatorMiddleware } from "./middleware/handle-validator-middleware";
 
 export class NotFoundResourceError extends Error {
   override name = "NotFoundResourceError" as const;
@@ -84,6 +86,13 @@ const bootstrap = () => {
   app.use(buildHandleVerifyJwtMiddleware({ logger }));
 
   // Validation
+  app.use(
+    openApiValidatorMiddleware({
+      apiSpec: "./sct.openapi.yaml",
+      validateRequests: true,
+    })
+  );
+  app.use(buildHandleOpenApiValidatorMiddleware({ logger }));
 
   app.get("*", (req, res) => {
     logger.info("Access to undefined path", {
