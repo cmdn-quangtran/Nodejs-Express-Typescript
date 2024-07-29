@@ -5,7 +5,8 @@
     "ignoreDeprecations": "5.0",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@prisma/*": ["prisma/*"]
     },
     "outDir": "./tsc-cache",
     "module": "ESNext",

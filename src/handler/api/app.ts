@@ -1,4 +1,3 @@
-import { Container } from "inversify";
 import cors from "cors";
 import express, {
   type NextFunction,
@@ -12,7 +11,9 @@ import {
   ROLES_INVALID_ERROR_CODE,
   UnexpectedError,
 } from "../../util/error-util";
-import { PORT } from "../../di-container/service-id";
+
+import { type Logger } from "../../domain/support/logger";
+import { LOGGER, ALLOW_ORIGINS } from "../../di-container/service-id";
 import { buildHealthRouter } from "./routes/health/health.route";
 
 export class NotFoundResourceError extends Error {
@@ -23,9 +24,8 @@ export class NotFoundResourceError extends Error {
 
 const bootstrap = () => {
   const { container } = initHandler();
-  const port = container.get<number>("PORT");
-  const allowOrigins = container.get<string>("ALLOW_ORIGINS");
-
+  const allowOrigins = container.get<string>(ALLOW_ORIGINS);
+  const logger = container.get<Logger>(LOGGER);
   const app = express();
 
   app.use(
@@ -40,22 +40,22 @@ const bootstrap = () => {
   app.use(express.urlencoded({ extended: true }));
 
   app.use((req, res, next) => {
-    // logger.resetKeys();
-    // logger.appendKeys({
-    //   path: req.path,
-    //   method: req.method,
-    // });
-    // logger.info("リクエスト情報", {
-    //   method: req.method,
-    //   path: req.path,
-    //   params: req.params,
-    //   query: req.query,
-    //   body: req.body,
-    //   header: req.headers,
-    // });
+    logger.resetKeys();
+    logger.appendKeys({
+      path: req.path,
+      method: req.method,
+    });
+    logger.info("Request Information", {
+      method: req.method,
+      path: req.path,
+      params: req.params,
+      query: req.query,
+      body: req.body,
+      header: req.headers,
+    });
 
     res.on("finish", () => {
-      // logger.info("レスポンスステータス", { statusCode: res.statusCode });
+      logger.info("Response Status", { statusCode: res.statusCode });
     });
 
     next();
@@ -71,10 +71,10 @@ const bootstrap = () => {
   // Validation
 
   app.get("*", (req, res) => {
-    // logger.info("未定義パスへのアクセス", {
-    //   message: "GET *",
-    //   reqPath: req.path,
-    // });
+    logger.info("Access to undefined path", {
+      message: "GET *",
+      reqPath: req.path,
+    });
 
     const notFoundResourceError = new NotFoundResourceError();
     res.status(404).send({
@@ -86,7 +86,7 @@ const bootstrap = () => {
   // Comprehensive error handling
   app.use(
     (error: HttpError, _req: Request, res: Response, _next: NextFunction) => {
-      // logger.error("ハンドリングできていないエラーをExpressがキャッチ", error);
+      logger.error("Unhandled error caught by Express", error);
       if (error.message === ROLES_INVALID_ERROR_CODE) {
         const errorContent = new AccessDeniedError();
         res.status(403).send({
@@ -103,8 +103,7 @@ const bootstrap = () => {
   );
 
   app.listen(80, () => {
-    // logger.info(`App listening on port ${port}`);
-    console.log(`App listening on port ${port}`);
+    logger.info(`App listening on port ...`);
   });
 };
 
