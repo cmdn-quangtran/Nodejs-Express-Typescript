@@ -5,6 +5,10 @@ import type { DB } from "../../prisma/generated/types";
 import { unwrapEnv } from "./env-util";
 import { LoggerImpl, type LogLevel } from "../infrastructure/logger";
 import { Kysely, PostgresDialect } from "kysely";
+import { UserRepositoryImpl } from "../infrastructure/repository/user-repository";
+import { RegisterUserUseCaseImpl } from "../use-case/register-user-use-case";
+import { UserRepository } from "../domain/model/user/user-repository";
+import { Logger } from "../domain/support/logger";
 
 export const registerContainer = (): Container => {
   const container = new Container();
@@ -74,6 +78,33 @@ export const registerContainer = (): Container => {
             });
           }
         },
+      })
+  );
+
+  /**
+   * Repositories
+   */
+  container
+    .bind(serviceId.USER_REPOSITORY)
+    .toDynamicValue(
+      (ctx) =>
+        new UserRepositoryImpl({
+          dbClient: ctx.container.get<Kysely<DB>>(serviceId.DB_CLIENT),
+          logger: ctx.container.get<LoggerImpl>(serviceId.LOGGER),
+        })
+    )
+    .inSingletonScope();
+
+  /**
+   * Use Cases
+   */
+  container.bind(serviceId.REGISTER_USER_USE_CASE).toDynamicValue(
+    (ctx) =>
+      new RegisterUserUseCaseImpl({
+        userRepository: ctx.container.get<UserRepository>(
+          serviceId.USER_REPOSITORY
+        ),
+        logger: ctx.container.get<Logger>(serviceId.LOGGER),
       })
   );
 

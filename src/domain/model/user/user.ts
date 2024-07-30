@@ -1,5 +1,4 @@
 import { Role } from "../../../../prisma/generated/enums";
-import { randomUUID } from "crypto";
 
 export type UserProps = {
   id: string;
@@ -41,7 +40,7 @@ export class User {
     createdAt,
     updatedAt,
   }: UserProps) {
-    this.id = id ?? randomUUID();
+    this.id = id;
     this.email = email;
     this.username = username;
     this.name = name;

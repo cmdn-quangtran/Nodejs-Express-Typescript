@@ -24,6 +24,7 @@ import {
 import { buildHealthRouter } from "./routes/health/health.route";
 import { buildHandleVerifyJwtMiddleware } from "./middleware/handle-auth-middleware";
 import { buildHandleOpenApiValidatorMiddleware } from "./middleware/handle-validator-middleware";
+import { buildAuthRouter } from "./routes/auth/auth-router";
 
 export class NotFoundResourceError extends Error {
   override name = "NotFoundResourceError" as const;
@@ -75,7 +76,9 @@ const bootstrap = () => {
 
   // Health check (no authentication required)
   app.use("/health", buildHealthRouter({ container }));
-
+  // Register user
+  app.use("/auth", buildAuthRouter({ container }));
+  
   // JWT verification
   const verifyJwt = auth({
     audience: auth0Audience,

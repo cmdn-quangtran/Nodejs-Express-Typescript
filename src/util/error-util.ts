@@ -71,3 +71,16 @@ export class ForbiddenError extends Error {
     super(message);
   }
 }
+
+/**
+ * ConflictError
+ */
+export const conflictMessage = "Conflict occurred";
+
+export class ConflictError extends Error {
+  override name = "ConflictError" as const;
+
+  constructor(message = conflictMessage) {
+    super(message);
+  }
+}

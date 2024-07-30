@@ -17,3 +17,13 @@ export const LOGGER = "LOGGER" as const;
  * Database Client
  */
 export const DB_CLIENT = "DB_CLIENT" as const;
+
+/**
+ * Repositories
+ */
+export const USER_REPOSITORY = "USER_REPOSITORY" as const;
+
+/**
+ * Use Cases
+ */
+export const REGISTER_USER_USE_CASE = "REGISTER_USER_USE_CASE" as const;

@@ -7,8 +7,6 @@ tags:
     description: For system use
   - name: setting
     description: For settings and management
-  - name: chat
-    description: For chat
 
 paths:
   /health:
@@ -20,14 +18,98 @@ paths:
       responses:
         "204":
           description: OK(No Content)
+  /register:
+    post:
+      tags:
+        - system
+      summary: Register a new user
+      description: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegisterRequest"
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: |
+            Validation error. There is a mistake in the specified parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: |
+            Conflic error. The record is exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
-    ActionStatus:
-      type: string
-      description: Correspondence status
+    Role:
       enum:
-        - EMPTY
-        - REQUIRED
-        - NEED_ACTION
-        - COMPLETED
+        - ADMIN
+        - USER
+    UserRegisterRequest:
+      type: object
+      description: register a new user
+      properties:
+        id:
+          type: string
+          example: "U12341834b3730e926dc9ccd41db1837a"
+        email:
+          type: string
+          format: email
+          example: "example@gmail.com"
+        password:
+          type: string
+          example: "password"
+        username:
+          type: string
+          example: "username"
+        name:
+          type: string
+          example: "name"
+        avatar:
+          type: string
+          example: "avatar.jpg"
+        dayOfBirth:
+          type: string
+          example: "2021-01-01T00:00:00+09:00"
+        phoneNumber:
+          type: number
+          example: "01012345678"
+      required:
+        - email
+        - password
+        - username
+        - name
+        - avatar
+        - dayOfBirth
+        - phoneNumber
+
+    # Error response
+    ErrorResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Error name. The name of the error class that occurs on the server side.
+          example: "NotFoundError"
+        message:
+          type: string
+          description: Error message
+          example: "The target resource was not found."
+      required:
+        - name
+        - message
