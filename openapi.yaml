@@ -87,7 +87,7 @@ components:
           type: string
           example: "2021-01-01T00:00:00+09:00"
         phoneNumber:
-          type: number
+          type: string
           example: "01012345678"
       required:
         - email

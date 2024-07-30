@@ -9,7 +9,7 @@ export type UserProps = {
   avatar: string | null;
   role: Role;
   dayOfBirth: Date;
-  phoneNumber: number;
+  phoneNumber: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -23,7 +23,7 @@ export class User {
   readonly avatar: string | null;
   readonly role: Role;
   readonly dayOfBirth: Date;
-  readonly phoneNumber: number;
+  readonly phoneNumber: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 

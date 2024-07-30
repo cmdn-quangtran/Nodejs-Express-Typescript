@@ -33,7 +33,7 @@ model User {
   name        String
   avatar      String?
   dayOfBirth  DateTime @db.Timestamp()
-  phoneNumber Int
+  phoneNumber String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
