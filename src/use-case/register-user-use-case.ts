@@ -1,14 +1,14 @@
 import { randomUUID } from "crypto";
-import { UserRepository } from "../domain/model/user/user-repository";
-import { Logger } from "../domain/support/logger";
-import { UserRegisterRequest } from "../generated/api/@types";
+import type { UserRepository } from "../domain/model/user/user-repository";
+import { type Logger } from "../domain/support/logger";
+import type { UserRegisterRequest } from "../generated/api/@types";
 import {
   ConflictError,
   DatabaseError,
   UnexpectedError,
 } from "../util/error-util";
-import { Result } from "../util/result-util";
-import { UseCase } from "./interfaces";
+import { type Result } from "../util/result-util";
+import { type UseCase } from "./interfaces";
 import { Role } from "../../prisma/generated/enums";
 import { User } from "../domain/model/user/user";
 

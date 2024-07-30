@@ -1,14 +1,14 @@
 import { Container } from "inversify";
-import * as serviceId from "./service-id";
+import { Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
+import * as serviceId from "./service-id";
 import type { DB } from "../../prisma/generated/types";
 import { unwrapEnv } from "./env-util";
 import { LoggerImpl, type LogLevel } from "../infrastructure/logger";
-import { Kysely, PostgresDialect } from "kysely";
 import { UserRepositoryImpl } from "../infrastructure/repository/user-repository";
 import { RegisterUserUseCaseImpl } from "../use-case/register-user-use-case";
-import { UserRepository } from "../domain/model/user/user-repository";
-import { Logger } from "../domain/support/logger";
+import { type UserRepository } from "../domain/model/user/user-repository";
+import { type Logger } from "../domain/support/logger";
 
 export const registerContainer = (): Container => {
   const container = new Container();

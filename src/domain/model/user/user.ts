@@ -16,15 +16,25 @@ export type UserProps = {
 
 export class User {
   readonly id: string;
+
   readonly email: string;
+
   readonly username: string;
+
   readonly name: string;
+
   readonly password: string;
+
   readonly avatar: string | null;
+
   readonly role: Role;
+
   readonly dayOfBirth: Date;
+
   readonly phoneNumber: string;
+
   readonly createdAt: Date;
+
   readonly updatedAt: Date;
 
   constructor({

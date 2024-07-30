@@ -4,10 +4,10 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import { HttpError } from "express-openapi-validator/dist/framework/types";
 import { middleware as openApiValidatorMiddleware } from "express-openapi-validator";
 import { auth } from "express-oauth2-jwt-bearer";
 import { initHandler } from "../init-handler";
-import { HttpError } from "express-openapi-validator/dist/framework/types";
 import {
   AccessDeniedError,
   ROLES_INVALID_ERROR_CODE,
@@ -78,7 +78,7 @@ const bootstrap = () => {
   app.use("/health", buildHealthRouter({ container }));
   // Register user
   app.use("/auth", buildAuthRouter({ container }));
-  
+
   // JWT verification
   const verifyJwt = auth({
     audience: auth0Audience,
@@ -130,7 +130,7 @@ const bootstrap = () => {
   );
 
   app.listen(80, () => {
-    logger.info(`App listening on port ...`);
+    logger.info("App listening on port ...");
   });
 };
 

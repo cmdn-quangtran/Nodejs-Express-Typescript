@@ -1,12 +1,12 @@
+import { Kysely } from "kysely";
 import type { DB } from "../../../prisma/generated/types";
 import { User } from "../../domain/model/user/user";
-import {
+import type {
   findByEmailResult,
   saveResult,
   UserRepository,
 } from "../../domain/model/user/user-repository";
 import type { Logger } from "../../domain/support/logger";
-import { Kysely } from "kysely";
 import { DatabaseError } from "../../util/error-util";
 
 export type EmployeeRepositoryProps = {

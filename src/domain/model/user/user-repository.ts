@@ -1,5 +1,5 @@
 import { DatabaseError } from "../../../util/error-util";
-import { Result } from "../../../util/result-util";
+import { type Result } from "../../../util/result-util";
 import { User } from "./user";
 
 export class NotFoundUserError extends Error {

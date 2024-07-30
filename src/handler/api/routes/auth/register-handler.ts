@@ -1,7 +1,7 @@
 import type * as inversify from "inversify";
 import type { Request, Response } from "express";
-import { Logger } from "../../../../domain/support/logger";
-import { RegisterUserUseCase } from "../../../../use-case/register-user-use-case";
+import { type Logger } from "../../../../domain/support/logger";
+import { type RegisterUserUseCase } from "../../../../use-case/register-user-use-case";
 import {
   LOGGER,
   REGISTER_USER_USE_CASE,
@@ -13,7 +13,7 @@ import {
   UnexpectedError,
   unexpectedErrorMessage,
 } from "../../../../util/error-util";
-import { UserRegisterRequest } from "../../../../generated/api/@types";
+import { type UserRegisterRequest } from "../../../../generated/api/@types";
 
 export const buildRegisterUserHandler =
   ({ container }: { container: inversify.Container }) =>

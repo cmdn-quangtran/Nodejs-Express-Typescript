@@ -57,6 +57,8 @@ paths:
 components:
   schemas:
     Role:
+      type: string
+      description: role of user
       enum:
         - ADMIN
         - USER

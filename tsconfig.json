@@ -1,6 +1,12 @@
 {
   "extends": "@tsconfig/strictest/tsconfig.json",
-  "exclude": ["node_modules", "tsc-cache", "src", "dist"],
+  "exclude": [
+    "node_modules",
+    "tsc-cache",
+    "src/generated",
+    "coverage/**",
+    "dist"
+  ],
   "compilerOptions": {
     "ignoreDeprecations": "5.0",
     "baseUrl": "./",
@@ -17,7 +23,8 @@
     "allowSyntheticDefaultImports": true,
     "noEmit": false,
     "incremental": true,
-    "lib": ["ESNext"]
+    "lib": ["ESNext"],
+    "skipLibCheck": true
   },
   "ts-node": {
     "esm": true,
