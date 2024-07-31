@@ -12,6 +12,7 @@
     "kysely",
     "Millis",
     "pkey",
-    "cqrs"
+    "cqrs",
+    "pAssw0rd"
   ]
 }

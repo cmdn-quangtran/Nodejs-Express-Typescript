@@ -1,0 +1,34 @@
+name: ci-server
+on:
+  pull_request:
+    paths:
+      - server/**
+      - .github/workflows/ci-server.yaml
+      - package.json
+      - package.json
+      - openapi.yaml
+job:
+  ci-server:
+    runs-on: ubuntu-latest
+
+    step:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: "package.json"
+          cache: npm
+
+      - name: Codegen
+        run: npm run codegen
+
+      - name: Check lint
+        run: |
+          npm run validate
+
+      - name: DB migration
+        run: npm run docker:up  -- --wait && npm run db:migrate
+        env:
+          DATABASE_URL: "postgresql://shop_admin:pAssw0rd@localhost:5432/shop?schema=public"
+          STAGE_NAME: local
