@@ -180,3 +180,4 @@ web/**/config.ts
 src/generated
 openapi.yaml
 package-lock.json
+data

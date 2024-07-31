@@ -8,6 +8,7 @@ export class NotFoundUserError extends Error {
   override message = "The user was not found";
 }
 
+export type findUserResult = Result<User[], DatabaseError>;
 export type findByEmailResult = Result<User | undefined, DatabaseError>;
 export type saveResult = Result<undefined, DatabaseError>;
 
@@ -25,4 +26,10 @@ export type UserRepository = {
    * @returns Returns a user
    */
   findByEmail(email: string): Promise<findByEmailResult>;
+
+  /**
+   * Find users
+   * @returns Returns users
+   */
+  findMany(): Promise<findUserResult>;
 };

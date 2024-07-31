@@ -9,6 +9,7 @@ import { UserRepositoryImpl } from "../infrastructure/repository/user-repository
 import { RegisterUserUseCaseImpl } from "../use-case/register-user-use-case";
 import { type UserRepository } from "../domain/model/user/user-repository";
 import { type Logger } from "../domain/support/logger";
+import { FindUserUseCaseImpl } from "@/use-case/find-user-use-case";
 
 export const registerContainer = (): Container => {
   const container = new Container();
@@ -80,6 +81,9 @@ export const registerContainer = (): Container => {
         },
       })
   );
+  /**
+   * Database Redis
+   */
 
   /**
    * Repositories
@@ -98,15 +102,30 @@ export const registerContainer = (): Container => {
   /**
    * Use Cases
    */
-  container.bind(serviceId.REGISTER_USER_USE_CASE).toDynamicValue(
-    (ctx) =>
-      new RegisterUserUseCaseImpl({
-        userRepository: ctx.container.get<UserRepository>(
-          serviceId.USER_REPOSITORY
-        ),
-        logger: ctx.container.get<Logger>(serviceId.LOGGER),
-      })
-  );
+  container
+    .bind(serviceId.REGISTER_USER_USE_CASE)
+    .toDynamicValue(
+      (ctx) =>
+        new RegisterUserUseCaseImpl({
+          userRepository: ctx.container.get<UserRepository>(
+            serviceId.USER_REPOSITORY
+          ),
+          logger: ctx.container.get<Logger>(serviceId.LOGGER),
+        })
+    )
+    .inSingletonScope();
+  container
+    .bind(serviceId.FIND_USER_USE_CASE)
+    .toDynamicValue(
+      (ctx) =>
+        new FindUserUseCaseImpl({
+          userRepository: ctx.container.get<UserRepository>(
+            serviceId.USER_REPOSITORY
+          ),
+          logger: ctx.container.get<Logger>(serviceId.LOGGER),
+        })
+    )
+    .inSingletonScope();
 
   return container;
 };

@@ -27,3 +27,4 @@ export const USER_REPOSITORY = "USER_REPOSITORY" as const;
  * Use Cases
  */
 export const REGISTER_USER_USE_CASE = "REGISTER_USER_USE_CASE" as const;
+export const FIND_USER_USE_CASE = "FIND_USER_USE_CASE" as const;

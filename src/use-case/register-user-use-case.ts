@@ -1,16 +1,16 @@
 import { randomUUID } from "crypto";
-import type { UserRepository } from "../domain/model/user/user-repository";
-import { type Logger } from "../domain/support/logger";
-import type { UserRegisterRequest } from "../generated/api/@types";
+import type { UserRepository } from "@/domain/model/user/user-repository";
+import { type Logger } from "@/domain/support/logger";
+import type { UserRegisterRequest } from "@/generated/api/@types";
 import {
   ConflictError,
   DatabaseError,
   UnexpectedError,
-} from "../util/error-util";
-import { type Result } from "../util/result-util";
+} from "@/util/error-util";
+import { type Result } from "@/util/result-util";
 import { type UseCase } from "./interfaces";
-import { Role } from "../../prisma/generated/enums";
-import { User } from "../domain/model/user/user";
+import { Role } from "prisma/generated/enums";
+import { User } from "@/domain/model/user/user";
 
 export type RegisterUserUseCaseInput = {
   input: UserRegisterRequest;

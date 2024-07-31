@@ -3,6 +3,7 @@ import type { DB } from "../../../prisma/generated/types";
 import { User } from "../../domain/model/user/user";
 import type {
   findByEmailResult,
+  findUserResult,
   saveResult,
   UserRepository,
 } from "../../domain/model/user/user-repository";
@@ -103,6 +104,41 @@ export class UserRepositoryImpl implements UserRepository {
       };
     } catch (error) {
       this.#logger.error("Failed to find by email", error as Error);
+      return {
+        success: false,
+        error: new DatabaseError(),
+      };
+    }
+  }
+
+  async findMany(): Promise<findUserResult> {
+    try {
+      const query = await this.#dbClient
+        .selectFrom("User")
+        .select([
+          "id",
+          "email",
+          "password",
+          "username",
+          "role",
+          "name",
+          "avatar",
+          "dayOfBirth",
+          "phoneNumber",
+          "createdAt",
+          "updatedAt",
+        ])
+        .execute();
+
+      const users = query.map((user) => new User(user));
+
+      this.#logger.debug("Success to find users");
+      return {
+        success: true,
+        data: users,
+      };
+    } catch (error) {
+      this.#logger.error("Failed to find users", error as Error);
       return {
         success: false,
         error: new DatabaseError(),

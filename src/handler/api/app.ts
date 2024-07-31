@@ -12,19 +12,20 @@ import {
   AccessDeniedError,
   ROLES_INVALID_ERROR_CODE,
   UnexpectedError,
-} from "../../util/error-util";
+} from "@/util/error-util";
 
-import { type Logger } from "../../domain/support/logger";
+import { type Logger } from "@/domain/support/logger";
 import {
   LOGGER,
   ALLOW_ORIGINS,
   AUTH0_AUDIENCE,
   AUTH0_ISSUE_BASE_URL,
-} from "../../di-container/service-id";
+} from "@/di-container/service-id";
 import { buildHealthRouter } from "./routes/health/health.route";
 import { buildHandleVerifyJwtMiddleware } from "./middleware/handle-auth-middleware";
 import { buildHandleOpenApiValidatorMiddleware } from "./middleware/handle-validator-middleware";
 import { buildAuthRouter } from "./routes/auth/auth-router";
+import { buildUserRouter } from "./routes/user/user-router";
 
 export class NotFoundResourceError extends Error {
   override name = "NotFoundResourceError" as const;
@@ -91,11 +92,13 @@ const bootstrap = () => {
   // Validation
   app.use(
     openApiValidatorMiddleware({
-      apiSpec: "./sct.openapi.yaml",
+      apiSpec: "./openapi.yaml",
       validateRequests: true,
     })
   );
   app.use(buildHandleOpenApiValidatorMiddleware({ logger }));
+
+  app.use("/user", buildUserRouter({ container }));
 
   app.get("*", (req, res) => {
     logger.info("Access to undefined path", {

@@ -53,6 +53,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /user:
+    get:
+      tags:
+        - system
+      summary: Register a new user
+      description: Register a new user
+
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponse"
+        "400":
+          description: |
+            Validation error. There is a mistake in the specified parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: |
+            Conflic error. The record is exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
@@ -100,6 +134,49 @@ components:
         - dayOfBirth
         - phoneNumber
 
+    UserResponse:
+      type: object
+      description: user information without password
+      properties:
+        id:
+          type: string
+          example: "U12341834b3730e926dc9ccd41db1837a"
+        email:
+          type: string
+          format: email
+          example: "example@gmail.com"
+        username:
+          type: string
+          example: "username"
+        name:
+          type: string
+          example: "name"
+        avatar:
+          type: string
+          example: "avatar.jpg"
+        dayOfBirth:
+          type: string
+          example: "2021-01-01T00:00:00+09:00"
+        phoneNumber:
+          type: string
+          example: "01012345678"
+      required:
+        - email
+        - username
+        - name
+        - avatar
+        - dayOfBirth
+        - phoneNumber
+
+    UsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserResponse"
+      required:
+        - users
     # Error response
     ErrorResponse:
       type: object
