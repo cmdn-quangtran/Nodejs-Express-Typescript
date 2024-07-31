@@ -1,5 +1,6 @@
 import { Container } from "inversify";
 import { Kysely, PostgresDialect } from "kysely";
+import { createClient, type RedisClientType } from "redis";
 import { Pool } from "pg";
 import * as serviceId from "./service-id";
 import type { DB } from "../../prisma/generated/types";
@@ -10,6 +11,8 @@ import { RegisterUserUseCaseImpl } from "../use-case/register-user-use-case";
 import { type UserRepository } from "../domain/model/user/user-repository";
 import { type Logger } from "../domain/support/logger";
 import { FindUserUseCaseImpl } from "@/use-case/find-user-use-case";
+import { RedisServiceImpl } from "@/infrastructure/redis";
+import type { RedisClient } from "@/domain/support/redis";
 
 export const registerContainer = (): Container => {
   const container = new Container();
@@ -82,8 +85,20 @@ export const registerContainer = (): Container => {
       })
   );
   /**
-   * Database Redis
+   * Redis Client
    */
+  container
+    .bind<RedisClient>(serviceId.REDIS_CLIENT)
+    .toDynamicValue((ctx) => {
+      const client = createClient({
+        url: `redis://localhost:6379`,
+      }) as RedisClientType;
+      return new RedisServiceImpl({
+        client,
+        logger: ctx.container.get<Logger>(serviceId.LOGGER),
+      });
+    })
+    .inSingletonScope();
 
   /**
    * Repositories
@@ -94,6 +109,7 @@ export const registerContainer = (): Container => {
       (ctx) =>
         new UserRepositoryImpl({
           dbClient: ctx.container.get<Kysely<DB>>(serviceId.DB_CLIENT),
+          redisClient: ctx.container.get<RedisClient>(serviceId.REDIS_CLIENT),
           logger: ctx.container.get<LoggerImpl>(serviceId.LOGGER),
         })
     )

@@ -12,6 +12,7 @@ export const DATABASE_PASSWORD = "DATABASE_PASSWORD" as const;
  * Utilities
  */
 export const LOGGER = "LOGGER" as const;
+export const REDIS_CLIENT = "REDIS_CLIENT" as const;
 
 /**
  * Database Client

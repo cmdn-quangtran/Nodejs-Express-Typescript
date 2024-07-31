@@ -9,19 +9,24 @@ import type {
 } from "../../domain/model/user/user-repository";
 import type { Logger } from "../../domain/support/logger";
 import { DatabaseError } from "../../util/error-util";
+import type { RedisClient } from "@/domain/support/redis";
 
 export type EmployeeRepositoryProps = {
   dbClient: Kysely<DB>;
+  redisClient: RedisClient;
   logger: Logger;
 };
 
 export class UserRepositoryImpl implements UserRepository {
   readonly #dbClient: Kysely<DB>;
 
+  readonly #redisClient: RedisClient;
+
   readonly #logger: Logger;
 
-  constructor({ dbClient, logger }: EmployeeRepositoryProps) {
+  constructor({ dbClient, redisClient, logger }: EmployeeRepositoryProps) {
     this.#dbClient = dbClient;
+    this.#redisClient = redisClient;
     this.#logger = logger;
   }
 
@@ -113,6 +118,18 @@ export class UserRepositoryImpl implements UserRepository {
 
   async findMany(): Promise<findUserResult> {
     try {
+      const cachedUsers = await this.#redisClient.get("all_users");
+      if (cachedUsers.success === true && cachedUsers.data != null) {
+        this.#logger.debug("Users found in Redis cache");
+        console.log("Users found in Redis cache-----------", cachedUsers.data);
+        const users = JSON.parse(cachedUsers.data).map(
+          (user: any) => new User(user)
+        );
+        return {
+          success: true,
+          data: users,
+        };
+      }
       const query = await this.#dbClient
         .selectFrom("User")
         .select([
@@ -131,6 +148,8 @@ export class UserRepositoryImpl implements UserRepository {
         .execute();
 
       const users = query.map((user) => new User(user));
+
+      await this.#redisClient.set("all_users", JSON.stringify(users));
 
       this.#logger.debug("Success to find users");
       return {
