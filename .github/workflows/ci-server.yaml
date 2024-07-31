@@ -1,21 +1,23 @@
 name: ci-server
+
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-job:
-  ci-server:
+
+jobs:
+  build:
     runs-on: ubuntu-latest
 
-    step:
+    steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v2
         with:
-          node-version-file: "package.json"
-          cache: npm
+          node-version: 14
+          cache: "npm"
 
       - name: Codegen
         run: npm run codegen
