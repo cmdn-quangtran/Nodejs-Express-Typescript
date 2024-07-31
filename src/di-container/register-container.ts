@@ -90,11 +90,10 @@ export const registerContainer = (): Container => {
   container
     .bind<RedisClient>(serviceId.REDIS_CLIENT)
     .toDynamicValue((ctx) => {
-      const client = createClient({
-        url: `redis://localhost:6379`,
-      }) as RedisClientType;
       return new RedisServiceImpl({
-        client,
+        client: createClient({
+          url: `redis://localhost:6379`,
+        }) as RedisClientType,
         logger: ctx.container.get<Logger>(serviceId.LOGGER),
       });
     })
