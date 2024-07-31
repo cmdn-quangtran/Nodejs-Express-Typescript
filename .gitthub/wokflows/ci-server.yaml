@@ -1,12 +1,9 @@
 name: ci-server
 on:
+  push:
+    branches: [main]
   pull_request:
-    paths:
-      - server/**
-      - .github/workflows/ci-server.yaml
-      - package.json
-      - package.json
-      - openapi.yaml
+    branches: [main]
 job:
   ci-server:
     runs-on: ubuntu-latest
