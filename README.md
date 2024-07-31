@@ -1,4 +1,7 @@
-# Staff Communication Tool
+# Architecture nodejs express
+
+- Architecture nodejs express use typescript via inversify(IoC)
+
 
 ## Requirements
 
