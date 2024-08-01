@@ -61,6 +61,8 @@ export class UserRepositoryImpl implements UserRepository {
         )
         .executeTakeFirst();
 
+      await this.#redisClient.del("all_users");
+
       this.#logger.debug("Success to save user");
       return {
         success: true,
@@ -121,9 +123,8 @@ export class UserRepositoryImpl implements UserRepository {
       const cachedUsers = await this.#redisClient.get("all_users");
       if (cachedUsers.success === true && cachedUsers.data != null) {
         this.#logger.debug("Users found in Redis cache");
-        console.log("Users found in Redis cache-----------", cachedUsers.data);
         const users = JSON.parse(cachedUsers.data).map(
-          (user: any) => new User(user)
+          (user: User) => new User(user)
         );
         return {
           success: true,

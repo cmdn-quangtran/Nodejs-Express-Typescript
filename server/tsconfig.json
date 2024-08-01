@@ -1,0 +1,30 @@
+{
+  "extends": "../tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "tsc-cache",
+    "src/generated",
+    "coverage/**",
+    "dist"
+  ],
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@prisma/*": ["prisma/*"]
+    },
+    "outDir": "./tsc-cache",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2020",
+    "importsNotUsedAsValues": "remove",
+    "verbatimModuleSyntax": true,
+    // Reference media-util, the sharp package couldn't resolved.
+    "allowSyntheticDefaultImports": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
+}

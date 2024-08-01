@@ -44,6 +44,10 @@
     "quotes": ["error", "double", { "avoidEscape": true }],
     "unused-imports/no-unused-imports": "error",
     "@typescript-eslint/no-explicit-any": "error",
+    /**
+     * In some case, reassigning param make code readability and maintainability.
+     * We should make sure the result after re-assigning param value by ourself. No need to avoid to use.
+     */
     "no-param-reassign": "off"
   }
 }

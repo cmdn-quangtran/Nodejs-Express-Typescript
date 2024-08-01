@@ -1,5 +1,6 @@
 export class RedisUnexpectedError extends Error {
   override name = "RedisUnexpectedError";
+
   override message = "Unexpected error occurred with Redis";
 }
 

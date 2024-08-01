@@ -89,14 +89,15 @@ export const registerContainer = (): Container => {
    */
   container
     .bind<RedisClient>(serviceId.REDIS_CLIENT)
-    .toDynamicValue((ctx) => {
-      return new RedisServiceImpl({
-        client: createClient({
-          url: `redis://localhost:6379`,
-        }) as RedisClientType,
-        logger: ctx.container.get<Logger>(serviceId.LOGGER),
-      });
-    })
+    .toDynamicValue(
+      (ctx) =>
+        new RedisServiceImpl({
+          client: createClient({
+            url: "redis://localhost:6379",
+          }) as RedisClientType,
+          logger: ctx.container.get<Logger>(serviceId.LOGGER),
+        })
+    )
     .inSingletonScope();
 
   /**

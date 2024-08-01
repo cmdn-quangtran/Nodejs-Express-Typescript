@@ -1,33 +1,8 @@
 {
   "extends": "@tsconfig/strictest/tsconfig.json",
-  "exclude": [
-    "node_modules",
-    "tsc-cache",
-    "src/generated",
-    "coverage/**",
-    "dist"
-  ],
   "compilerOptions": {
-    "ignoreDeprecations": "5.0",
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"],
-      "@prisma/*": ["prisma/*"]
-    },
-    "outDir": "./tsc-cache",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "target": "ES2020",
-    "importsNotUsedAsValues": "remove",
-    "verbatimModuleSyntax": true,
-    "allowSyntheticDefaultImports": true,
     "noEmit": false,
     "incremental": true,
-    "lib": ["ESNext"],
-    "skipLibCheck": true
-  },
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
+    "lib": ["ESNext"]
   }
 }

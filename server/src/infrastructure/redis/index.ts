@@ -4,10 +4,11 @@ import {
   RedisUnexpectedError,
   type RedisCacheResult,
   type RedisClient,
-} from "@/domain/support/redis";
+} from "../../domain/support/redis";
 
 export class RedisServiceImpl implements RedisClient {
   #client: RedisClientType;
+
   readonly #logger: Logger;
 
   constructor({ client, logger }: { client: RedisClientType; logger: Logger }) {
