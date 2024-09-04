@@ -15,9 +15,15 @@
     "sort": "sort-package-json && npm run sort -ws",
     "codegen": "npm run codegen -w server"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@aws-sdk/s3-presigned-post": "^3.623.0",
+    "@types/multer": "^1.4.11",
+    "mime-types": "^2.1.35",
+    "multer": "^1.4.5-lts.1"
+  },
   "devDependencies": {
     "@tsconfig/strictest": "2.0.2",
+    "@types/mime-types": "^2.1.4",
     "@typescript-eslint/eslint-plugin": "6.18.1",
     "@typescript-eslint/parser": "6.20.0",
     "aspida": "1.14.0",

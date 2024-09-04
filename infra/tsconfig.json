@@ -1,0 +1,14 @@
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "importsNotUsedAsValues": "remove",
+    "verbatimModuleSyntax": false,
+    "incremental": true,
+    "ignoreDeprecations": "5.0",
+    "exactOptionalPropertyTypes": false
+  },
+  "include": ["lib", "bin", "*.ts"],
+  "exclude": ["babel__core", "node_modules", "**/*.js", "cdk.out"]
+}

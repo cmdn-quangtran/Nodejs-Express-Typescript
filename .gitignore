@@ -176,3 +176,5 @@ tsc-cache
 localhost.pem
 localhost-key.pem
 package-lock.json
+redis.conf
+data

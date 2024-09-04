@@ -76,7 +76,55 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "409":
           description: |
-            Conflic error. The record is exists.
+            Conflict error. The record is exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /user/upload:
+    post:
+      tags:
+        - media
+      summary: Upload files to S3
+      description: Endpoint to upload one or more files to S3 storage.
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: The files to upload
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MultipleUploadPresignedURLResponse"
+        "400":
+          description: |
+            Validation error. There is a mistake in the specified parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: |
+            Authentication error. The specified token is invalid.
           content:
             application/json:
               schema:
@@ -177,7 +225,6 @@ components:
             $ref: "#/components/schemas/UserResponse"
       required:
         - users
-    # Error response
     ErrorResponse:
       type: object
       properties:
@@ -192,3 +239,34 @@ components:
       required:
         - name
         - message
+    OneUploadPresignedURLResponse:
+      type: object
+      properties:
+        fileName:
+          type: string
+          example: "example.jpg"
+        uploadUrl:
+          type: string
+          example: "https://your-bucket.s3.amazonaws.com/path/to/file.jpg"
+        fileType:
+          type: string
+          example: "image/jpeg"
+      required:
+        - fileName
+        - uploadUrl
+        - fileType
+
+    MultipleUploadPresignedURLResponse:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/OneUploadPresignedURLResponse"
+      required:
+        - files
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: Access token

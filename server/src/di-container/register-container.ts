@@ -1,5 +1,6 @@
 import { Container } from "inversify";
 import { Kysely, PostgresDialect } from "kysely";
+import { S3Client } from "@aws-sdk/client-s3";
 import { createClient, type RedisClientType } from "redis";
 import { Pool } from "pg";
 import * as serviceId from "./service-id";
@@ -13,6 +14,9 @@ import { type Logger } from "../domain/support/logger";
 import { FindUserUseCaseImpl } from "@/use-case/find-user-use-case";
 import { RedisServiceImpl } from "@/infrastructure/redis";
 import type { RedisClient } from "@/domain/support/redis";
+import { ObjectStorageImpl } from "@/infrastructure/object-storage";
+import { UploadFileUseCaseImpl } from "@/use-case/upload-file-use-case";
+import type { ObjectStorage } from "@/domain/support/object-storage";
 
 export const registerContainer = (): Container => {
   const container = new Container();
@@ -41,6 +45,12 @@ export const registerContainer = (): Container => {
     .bind(serviceId.DATABASE_PASSWORD)
     .toDynamicValue(() => unwrapEnv("DATABASE_PASSWORD"))
     .inSingletonScope();
+  container
+    .bind(serviceId.S3_BUCKET_NAME)
+    .toConstantValue(unwrapEnv("S3_BUCKET_NAME"));
+  container
+    .bind(serviceId.S3_BUCKET_REGION)
+    .toConstantValue(unwrapEnv("S3_BUCKET_REGION"));
 
   /**
    * Utilities
@@ -51,6 +61,18 @@ export const registerContainer = (): Container => {
       () =>
         new LoggerImpl({
           logLevel: container.get<string>(serviceId.LOG_LEVEL) as LogLevel,
+        })
+    )
+    .inSingletonScope();
+  container
+    .bind(serviceId.OBJECT_STORAGE)
+    .toDynamicValue(
+      () =>
+        new ObjectStorageImpl({
+          client: new S3Client({
+            region: container.get<string>(serviceId.S3_BUCKET_REGION),
+          }),
+          logger: container.get<Logger>(serviceId.LOGGER),
         })
     )
     .inSingletonScope();
@@ -138,6 +160,16 @@ export const registerContainer = (): Container => {
           userRepository: ctx.container.get<UserRepository>(
             serviceId.USER_REPOSITORY
           ),
+          logger: ctx.container.get<Logger>(serviceId.LOGGER),
+        })
+    )
+    .inSingletonScope();
+  container
+    .bind(serviceId.UPLOAD_FILE_USE_CASE)
+    .toDynamicValue(
+      (ctx) =>
+        new UploadFileUseCaseImpl({
+          storage: ctx.container.get<ObjectStorage>(serviceId.OBJECT_STORAGE),
           logger: ctx.container.get<Logger>(serviceId.LOGGER),
         })
     )
